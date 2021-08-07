@@ -1,0 +1,43 @@
+#====================WEATHER MONITORING THROUGH PYTHON WITH LIVE NOTIFICATION IN NOTIFICATION BAR AS WELL AS GETING SMS TO PHONE================
+#====================AUTHOR-ABHISHEK L==========================================================================================================
+
+import requests
+from bs4 import BeautifulSoup
+from win10toast import ToastNotifier
+from twilio.rest import Client
+try:
+
+    Notificationbar = ToastNotifier()
+
+
+
+    def geturl(url):
+        r = requests.get(url)
+        return r.text
+
+
+    page = geturl("https://weather.com/en-IN/weather/today/l/e5e5d9e304a310cd9f5387b75551e92f5e8cab07d343b649a100e4096931e227")
+
+    soup = BeautifulSoup(page,'html.parser')
+
+    current_temp = soup.find_all("span",class_="CurrentConditions--tempValue--1RYJJ")
+
+    chances_rain = soup.find_all("div",class_="CurrentConditions--precipValue--1RgXi")
+    print(current_temp)
+    print(chances_rain)
+    tempvalue = (str(current_temp))
+    rainsituation = str(chances_rain)
+    result = ("current_temp " + tempvalue[82:-8] + "celcius" + "\n" + rainsituation[85:87] + "of rain chances")
+    print(result)
+    Notificationbar.show_toast("Live Weather update from ನಮ್ಮ ಬೆಂಗಳೂರು ",result, duration=30)
+
+    ACCOUNT_SID = 'AC6ce641a195eb1e3dc14b488913a5f4c3'
+    AUTH_TOKEN = '40fd0f8eaa16b3448bb03d0877df413f'
+    client = Client(ACCOUNT_SID,AUTH_TOKEN)
+    message = client.messages.create(
+        from_='+19176339532',
+        body = result,
+        to ='+918073796903'
+    )
+except:
+    print("please enter a proper receiver phonenumber")
