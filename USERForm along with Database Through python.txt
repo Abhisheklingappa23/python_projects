@@ -1,0 +1,132 @@
+#=================Sign up Form along with Database Through python============================
+#=================AUTHOR-ABHISHEK L==========================================================
+
+
+from tkinter import *
+from PIL import Image,ImageTk
+from tkinter import ttk,messagebox
+import pymysql
+
+class Register:
+    def __init__(self,root):
+        self.root = root
+        self.root.title("Registration window")
+        self.root.geometry("1350x700+0+0")
+        self.root.config(bg ="white")
+        #=====================background image for tk=============================
+        self.bg=ImageTk.PhotoImage(file='images/CHIKMAGALUR.jpg')
+        bg=Label(self.root,image=self.bg).place(x=250,y=0,relwidth=1,relheight=1)
+
+        #======================left side image tk=================================
+        self.lef=ImageTk.PhotoImage(file='images/plant-nature-sun-life-nature-shut.jpg')
+        lef=Label(self.root,image=self.lef).place(x=30,y=100,width=400,height=500)
+
+        #==========================Registration form==============================
+        frame1 = Frame(self.root,bg='white')
+        frame1.place(x=430,y=100,width=700,height=500)
+
+        title=Label(frame1,text="REGISTER HERE",font=("times new roman",20,"bold"),bg="white",fg="green").place(x=50,y=30)
+
+        #===================================names============================================================================
+        f_name = Label(frame1, text="First Name", font=("times new roman", 15, "bold"), bg="white", fg="gray").place(x=50,y=100)
+        self.txt_fname =Entry(frame1,font=("times new roman",15),bg="lightgray")
+        self.txt_fname.place(x=50,y=130,width=250)
+
+        l_name = Label(frame1, text="Last Name", font=("times new roman", 15, "bold"), bg="white", fg="gray").place(x=370,y=100)
+        self.txt_lname =Entry(frame1,font=("times new roman",15),bg="lightgray")
+        self.txt_lname.place(x=370,y=130,width=250)
+
+        #=========================================contact info====================================
+        contact = Label(frame1, text="Contact No.", font=("times new roman", 15, "bold"), bg="white", fg="gray").place(x=50,y=170)
+        self.txt_contact =Entry(frame1,font=("times new roman",15),bg="lightgray")
+        self.txt_contact.place(x=50,y=200,width=250)
+
+        email = Label(frame1, text="E-mail", font=("times new roman", 15, "bold"), bg="white", fg="gray").place(x=370,y=170)
+        self.txt_email =Entry(frame1,font=("times new roman",15),bg="lightgray")
+        self.txt_email.place(x=370,y=200,width=250)
+
+        #============================securityquest===================================================
+        question = Label(frame1, text="Security Question", font=("times new roman", 15, "bold"), bg="white", fg="gray").place(x=50,y=230)
+        self.cmb_quest =ttk.Combobox(frame1,font=("times new roman",13),state="readonly",justify=CENTER)
+        self.cmb_quest['values']=("select","Birth-date","petname","BikeNum")
+        self.cmb_quest.place(x=50,y=270,width=250)
+        self.cmb_quest.current(0)
+
+        ans = Label(frame1, text="Answer", font=("times new roman", 15, "bold"), bg="white", fg="gray").place(x=370,y=230)
+        self.txt_ans =Entry(frame1,font=("times new roman",15),bg="lightgray")
+        self.txt_ans.place(x=370,y=270,width=250)
+
+        #===========================Pass===============
+        password = Label(frame1, text="Password", font=("times new roman", 15, "bold"), bg="white", fg="gray").place(x=50,y=300)
+        self.txt_password =Entry(frame1,font=("times new roman",15),bg="lightgray")
+        self.txt_password.place(x=50,y=340,width=250)
+
+        cpass = Label(frame1, text="Confirm Password", font=("times new roman", 15, "bold"), bg="white", fg="gray").place(x=370,y=300)
+        self.txt_cpass =Entry(frame1,font=("times new roman",15),bg="lightgray")
+        self.txt_cpass.place(x=370,y=340,width=250)
+        #==========================terms and condition===========================
+        self.var_chk=IntVar()
+        chk=Checkbutton(frame1,text="I Agree Terms & Conditions",variable=self.var_chk,onvalue=1,offvalue=0,bg="white",font=("times new roman",12)).place(x=50,y=370)
+        btn_register=Button(frame1,text="SUBMIT",bd=0,cursor="hand2",command=self.register_data,bg="gray",font=("times new roman",12)).place(x=50,y=410)
+
+        btn_login = Button(self.root, text="SIGN IN", bd=0, cursor="hand2", bg="lightgray", font=("times new roman", 16)).place(x=200,y=300)
+
+    def clear(self):
+        self.txt_fname.delete(0,END)
+        self.txt_lname.delete(0,END)
+        self.txt_contact.delete(0,END)
+        self.txt_email.delete(0,END)
+        self.cmb_quest.current(0)
+        self.txt_ans.delete(0,END)
+        self.txt_password.delete(0,END)
+        self.txt_cpass.delete(0, END)
+
+
+    def register_data(self):
+        if self.txt_fname.get()==""or self.txt_lname.get()==""or self.txt_contact.get()=="" or self.txt_email.get()=="" or self.cmb_quest.get()=="select" or self.txt_ans.get()=="" or self.txt_password.get()=="" or self.txt_cpass.get()=="":
+            messagebox.showerror("Error","All Fields are required",parent=self.root)
+        elif self.txt_password.get() != self.txt_cpass.get():
+            messagebox.showerror("Error", "pass word and confirm password must be same", parent=self.root)
+        elif self.var_chk.get()==0:
+            messagebox.showerror("Error", "please Agree terms & conditions", parent=self.root)
+        else:
+            try:
+                conn=pymysql.connect(host="localhost",user="root",password="",database="registration")
+                cur=conn.cursor()
+                cur.execute("select * from emp_details where email=%s",self.txt_email.get())
+                row=cur.fetchone()
+                #print(row)
+                if row!=None:
+                    messagebox.showerror("Error", "email already exists", parent=self.root)
+                else:
+                    cur.execute("insert into emp_details(f_name,l_name,contact,email,question,answer,password) values(%s,%s,%s,%s,%s,%s,%s)",
+
+                                (
+                                    self.txt_fname.get(),
+                                    self.txt_lname.get(),
+                                    self.txt_contact.get(),
+                                    self.txt_email.get(),
+                                    self.cmb_quest.get(),
+                                    self.txt_ans.get(),
+                                    self.txt_password.get()
+                                )
+                                )
+                    conn.commit()
+                    conn.close()
+                    messagebox.showinfo("success", "Registered Successfully", parent=self.root)
+                    self.clear()
+            except Exception as es:
+                messagebox.showerror("Error", f"error due to: {str(es)}", parent=self.root)
+
+
+
+
+
+
+
+
+
+
+root=Tk()
+obj = Register(root)
+root.mainloop()
