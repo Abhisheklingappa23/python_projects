@@ -1,0 +1,32 @@
+'''AUTHOR-ABHISHEK L'''
+'''CERTIFICATE GENERATOR'''
+try:
+
+    from PIL import Image, ImageDraw, ImageFont
+
+    af = ["ABHISHEK"]
+    font = ImageFont.truetype('arial.ttf', 60)
+    afont = ImageFont.truetype('arial.ttf', 40)
+    for i in af:
+        img = Image.open('certificate-of-participation.png')
+        draw = ImageDraw.Draw(img)
+        draw.text(xy=(550, 650),
+                  text='{}'.format(i),
+                  fill=(0, 0, 0),
+                  font=font)
+        draw.text(xy=(620, 750),
+                  text="CODING",
+                  fill=(0, 0, 0),
+                  font=font)
+        draw.text(xy=(1150, 750),
+                  text="2021",
+                  fill=(0, 0, 0),
+                  font=font)
+        draw.text(xy=(1050, 850),
+                  text="ABHISHEK L",
+                  fill=(0, 0, 0),
+                  font=afont)
+        img.save('pictures.png')
+finally:
+    print("scripting got executed!")
+    print("please try with different text alignment for different images ")
