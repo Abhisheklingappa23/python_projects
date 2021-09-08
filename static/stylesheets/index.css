@@ -1,0 +1,29 @@
+
+h1{
+    background-color:transparent;
+    color: white;
+    text-align: center;
+    
+}
+div {
+    background-color:transparent;
+    border: 1px solid greenyellow;
+    width: 45%;
+    text-align: center;
+    float: left;
+    height: 200px;
+    margin: 20px;
+
+}
+
+button{
+    width: 150px;
+    height: 40px;
+    background-color: white;
+    color: grey;
+}
+button:hover{
+    background-color: grey;
+    color: white;
+
+}

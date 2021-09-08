@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<html lang="en"></html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'stylesheets/adms.css'%}"> 
+    <title>Admission details page</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            background-image: url("{% static 'images/form.jpg'%}");
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            background-repeat: no repeat ;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+    <body>
+        <h1>For New Admission please fill form  below</h1>
+        <br/>
+        <br/>
+        <div>
+        <br/>
+            <h2><form method="POST" class="tt">
+                <table  >
+                    {{form.as_table}}
+                </table>
+                <input type="submit" value="Addstudent">
+                <br/>
+                {% csrf_token %}
+            </form></h2>
+            <br/>
+            <br/>
+        </div>
+    </body>
+</html>
