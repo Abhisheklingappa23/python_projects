@@ -1,0 +1,30 @@
+import requests
+from bs4 import BeautifulSoup
+import csv
+URL = "https://www.shoppersstop.com/juniper-womens-sage-green-cotton-flex-printed-ethnic-jumpsuit-with-bell-sleeves-and-add-on-belt/p-9926SAGEGREEN/colorChange/9926SAGEGREEN_SAGE"
+
+headers = {
+    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
+}
+page = requests.get(URL,headers=headers)
+#print(page)
+soup = BeautifulSoup(page.content,'html.parser')
+#print(soup.prettify())
+
+productprice = soup.find(itemprop="price")
+print(productprice)
+
+
+
+productname = soup.find(itemprop='name')
+print("product name is ",productname)
+
+brand = soup.find(class_="pdp-bname")
+print("brand name is ",brand)
+image = soup.find(class_="loaderContainer")
+print("imageurl",image)
+
+
+
+
+
